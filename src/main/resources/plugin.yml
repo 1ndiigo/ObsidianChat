@@ -1,0 +1,45 @@
+name: ObsidianChat
+version: ${project.version}
+main: me.cobble.obsidianchat.obsidianchat.ObsidianChat
+api-version: 1.16
+depend:
+  - PlaceholderAPI
+prefix: ObiChat
+authors: [ Cbblestone ]
+description: A useful and powerful chat system
+commands:
+  chatconfig:
+    description: Configures Player and Plugin settings
+    permission: obisidianchat.configure
+    aliases:
+      - cc
+      - chatconf
+      - chatcfg
+  nickname:
+    description: Nick yourself!
+    aliases:
+      - nick
+  queryusername:
+    description: idk
+  clearchat:
+    description: Clears Chat
+permissions:
+  obsidianchat.clearchat:
+    description: Allows you to clear chat
+  obsidianchat.nick:
+    description: Allows you to nick yourself
+    default: op
+  obsidianchat.configure:
+    default: op
+    children:
+      - obsidianchat.configure.player
+      - obsidianchat.configure.plugin
+      - obsidianchat.configure.player.others
+  obsidianchat.configure.player.others:
+    description: Allows you to modify values of other players
+    children:
+      - obsidianchat.configure.player
+  obsidianchat.configure.player:
+    description: Allows you to modify values of yourself
+  obsidianchat.configure.plugin:
+    description: Allows you to modify plugin settings

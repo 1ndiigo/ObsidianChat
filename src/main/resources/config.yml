@@ -1,0 +1,18 @@
+default-chat-color: "&7"
+default-tag-color: "&7"
+playerlist-names: true
+playerlist-modificiation: true
+player-list-header:
+  - "&b&lFreeDev"
+  - "&8Where the magic happens."
+  - ""
+player-list-footer:
+  - "&7Players&8: %server_online_world%"
+  - "&7TPS&8: %server_tps_1_colored%"
+  - ""
+message-format-in-yml: false
+message-send-sound: false
+message-format: "&7%luckperms_prefix% &8| "
+
+nickname-no-params-msg: "&cUsage: /nickname <nickname>"
+broadcast-who-cleared-chat: false
