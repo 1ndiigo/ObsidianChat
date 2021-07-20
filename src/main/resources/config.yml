@@ -3,7 +3,7 @@ default-tag-color: "&7"
 playerlist-names: true
 playerlist-modificiation: true
 player-list-header:
-  - "&b&lFreeDev"
+  - "&b&lSERVER NAME"
   - "&8Where the magic happens."
   - ""
 player-list-footer:
