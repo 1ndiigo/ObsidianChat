@@ -3,7 +3,7 @@ package me.cobble.obsidianchat.cmds;
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
 import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
-import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,37 +22,37 @@ public class ChatConfigCmd implements CommandExecutor {
             Player p = (Player) sender;
 
             // Argument Solving
-            // Do not question the WET-ness of this code
+            // Do not question the lack of DRY of this code
             switch (args.length) {
                 default:
-                    p.sendMessage(Utils.chat("&CToo many arguments"));
+                    p.sendMessage(ChatUtil.color("&CToo many arguments"));
                 case 0:
-                    p.sendMessage(Utils.chat("&#2d0f3aObsidianChat &7Config"));
-                    p.sendMessage(Utils.chat("&#2d0f3aUsage: &7/chatconfig (player|plugin)"));
+                    p.sendMessage(ChatUtil.color("&#2d0f3aObsidianChat &7Config"));
+                    p.sendMessage(ChatUtil.color("&#2d0f3aUsage: &7/chatconfig (player|plugin)"));
                 case 1:
                     if (args[0].equalsIgnoreCase("player")) {
-                        p.sendMessage(Utils.chat("&cPlease specify a player."));
+                        p.sendMessage(ChatUtil.color("&cPlease specify a player."));
                     }
 
                     if (args[0].equalsIgnoreCase("plugin")) {
-                        p.sendMessage(Utils.chat("&aHI"));
+                        p.sendMessage(ChatUtil.color("&aHI"));
                     }
                 case 2:
                     if (args[0].equalsIgnoreCase("player")) {
-                        p.sendMessage(Utils.chat("&cPlease specify a setting you want to change."));
+                        p.sendMessage(ChatUtil.color("&cPlease specify a setting you want to change."));
                     }
                     if (args[0].equalsIgnoreCase("plugin")) {
                         if (args[1].equalsIgnoreCase("reload")) {
                             Config.reload();
-                            p.sendMessage(Utils.chat("&aPlugin reloaded :D"));
+                            p.sendMessage(ChatUtil.color("&aPlugin reloaded :D"));
                         }
                     }
                 case 3:
                     if (args[0].equalsIgnoreCase("player")) {
                         if (args[2].equalsIgnoreCase("chat-color")) {
-                            p.sendMessage(Utils.chat("&cPlease specify what color you want."));
+                            p.sendMessage(ChatUtil.color("&cPlease specify what color you want."));
                         } else {
-                            p.sendMessage(Utils.chat("&cInvalid Setting."));
+                            p.sendMessage(ChatUtil.color("&cInvalid Setting."));
                         }
                     }
                 case 4:
@@ -60,11 +60,11 @@ public class ChatConfigCmd implements CommandExecutor {
                         if (args[2].equalsIgnoreCase("chat-color")) {
                             Player target = Bukkit.getPlayer(args[1]);
                             PlayerChatData.modifyPCD(target.getUniqueId(), args[3], "cc");
-                            p.sendMessage(Utils.chat("&aSuccessfully set chat color to " + args[3] + "this"));
+                            p.sendMessage(ChatUtil.color("&aSuccessfully set chat color to " + args[3] + "this"));
                         } else if (args[2].equalsIgnoreCase("tag-color")) {
                             Player target = Bukkit.getPlayer(args[1]);
                             PlayerChatData.modifyPCD(target.getUniqueId(), args[3], "tagc");
-                            p.sendMessage(Utils.chat("&aSuccessfully set tag color to " + args[3] + "this"));
+                            p.sendMessage(ChatUtil.color("&aSuccessfully set tag color to " + args[3] + "this"));
                         }
                     }
             }

@@ -1,7 +1,7 @@
 package me.cobble.obsidianchat.obsidianchat;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -31,8 +31,8 @@ public class PlayerListRefresh {
                         footerString.append(str).append("\n");
                     }
 
-                    p.setPlayerListHeader(PlaceholderAPI.setPlaceholders(p, Utils.chat(headerString.toString())));
-                    p.setPlayerListFooter(PlaceholderAPI.setPlaceholders(p, Utils.chat(footerString.toString())));
+                    p.setPlayerListHeader(PlaceholderAPI.setPlaceholders(p, ChatUtil.color(headerString.toString())));
+                    p.setPlayerListFooter(PlaceholderAPI.setPlaceholders(p, ChatUtil.color(footerString.toString())));
                 }
             }, 0L, 20L * 3);
         }

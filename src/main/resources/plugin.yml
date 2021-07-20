@@ -19,8 +19,6 @@ commands:
     description: Nick yourself!
     aliases:
       - nick
-  queryusername:
-    description: idk
   clearchat:
     description: Clears Chat
 permissions:

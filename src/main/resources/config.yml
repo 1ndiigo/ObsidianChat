@@ -1,7 +1,7 @@
 default-chat-color: "&7"
 default-tag-color: "&7"
 playerlist-names: true
-playerlist-modificiation: true
+playerlist-modification: true
 player-list-header:
   - "&b&lSERVER NAME"
   - "&8Where the magic happens."

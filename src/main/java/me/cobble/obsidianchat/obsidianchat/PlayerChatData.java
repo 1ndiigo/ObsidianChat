@@ -10,6 +10,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.util.UUID;
 
+/**
+ * Various utilities related to chat
+ */
 public class PlayerChatData {
 
     private static ObsidianChat plugin;
@@ -18,6 +21,13 @@ public class PlayerChatData {
         PlayerChatData.plugin = plugin;
     }
 
+    /**
+     * Retrieves Player Chat Data from file
+     *
+     * @param playerUUID The player's UUID
+     * @returns Returns a Gson JsonObject of the player's data
+     * @see com.google.gson.JsonObject
+     */
     public static JsonObject getPCD(@NotNull UUID playerUUID) {
         File file = new File(Bukkit.getPluginManager().getPlugin(plugin.getName()).getDataFolder(), "player-chat-data.json");
         Gson gson = new Gson();
@@ -50,7 +60,12 @@ public class PlayerChatData {
             return null;
         }
     }
-
+    /**
+     * Gets the whole Player Chat Data file as a JsonObject
+     *
+     * @see com.google.gson.JsonObject
+     * @returns The Entire PCD file
+     */
     public static JsonObject getEntirePCD() {
         File file = ObsidianChat.getPCDFile();
         Gson gson = new Gson();
@@ -70,6 +85,13 @@ public class PlayerChatData {
         }
     }
 
+
+    /**
+     * Creates an entry in the PCD file
+     *
+     * @param playerUUID Player's UUID
+     * @see org.bukkit.entity.Player
+     */
     public static void createPCD(UUID playerUUID) {
         File file = ObsidianChat.getPCDFile();
         GsonBuilder builder = new GsonBuilder();
@@ -95,7 +117,14 @@ public class PlayerChatData {
         }
     }
 
-    public static void modifyPCD(UUID playerUUID, String valueToMod, String value) {
+    /**
+     * Modifies the player's PCD
+     *
+     * @param playerUUID Player's UUID
+     * @param key JSON key to modify
+     * @param value value to set the JSON key
+     */
+    public static void modifyPCD(UUID playerUUID, String key, String value) {
         File file = ObsidianChat.getPCDFile();
         GsonBuilder builder = new GsonBuilder();
         builder.setLenient();
@@ -110,15 +139,15 @@ public class PlayerChatData {
             PlayerChatData.getEntirePCD().remove(playerUUID.toString());
 
             if (value.equalsIgnoreCase("cc")) {
-                jsonObject.addProperty("cc", valueToMod);
+                jsonObject.addProperty("cc", key);
                 jsonObject.addProperty("tagc", tagColorBefore);
                 jsonObject.addProperty("nick", nickBeforeReset);
             } else if (value.equalsIgnoreCase("nick")) {
                 jsonObject.addProperty("tagc", tagColorBefore);
                 jsonObject.addProperty("cc", chatColorBefore);
-                jsonObject.addProperty("nick", valueToMod);
+                jsonObject.addProperty("nick", key);
             } else {
-                jsonObject.addProperty("tagc", valueToMod);
+                jsonObject.addProperty("tagc", key);
                 jsonObject.addProperty("cc", chatColorBefore);
                 jsonObject.addProperty("nick", nickBeforeReset);
             }

@@ -31,8 +31,6 @@ public final class ObsidianChat extends JavaPlugin {
 
     private void register(ObsidianChat plugin) {
 
-        new PlayerListRefresh(plugin).run();
-
         // listeners
         new ObsidianChatListenerMain(plugin);
 
@@ -40,7 +38,6 @@ public final class ObsidianChat extends JavaPlugin {
         new ChatConfigCmd(plugin);
         new ChatConfigCompleter(plugin);
         new NicknameCmd(plugin);
-        new QueryUsername(plugin);
         new ClearChatCmd(plugin);
     }
 
@@ -55,6 +52,7 @@ public final class ObsidianChat extends JavaPlugin {
         this.loadConfig();
         getLogger().info("Loaded Config");
         this.register(plugin);
+        new PlayerListRefresh(plugin).run();
         getLogger().info("Registered Components");
     }
 

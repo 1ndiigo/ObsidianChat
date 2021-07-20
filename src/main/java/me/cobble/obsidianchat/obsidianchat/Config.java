@@ -15,6 +15,10 @@ public class Config {
     private static File file;
     private static YamlConfiguration config;
 
+    /**
+    * Creates config file
+    * Note: You should not use the config class before this is ran
+     */
     public static void setup() { // NO_UCD (use default)
         file = new File(
                 Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin(ObsidianChat.getPlugin().getName())).getDataFolder(),
@@ -28,16 +32,22 @@ public class Config {
                 // that's a lot of damage
                 e.printStackTrace();
             }
-            fileExists();
         }
 
         config = YamlConfiguration.loadConfiguration(file);
     }
 
+    /**
+     * Gets values from config
+     */
     public static FileConfiguration get() {
         return config;
     }
 
+    /**
+     * Saves config
+     * Note: This should be ran after editing the config
+     */
     public static void save() { // NO_UCD (use default)
         try {
             config.save(file);
@@ -46,19 +56,11 @@ public class Config {
         }
     }
 
+    /**
+     * Reloads the config
+     */
     public static void reload() { // NO_UCD (unused code)
         config = YamlConfiguration.loadConfiguration(file);
         log.info("Obsidian Chat config reloaded");
-    }
-
-    public static void fileExists() { // NO_UCD (use private)
-        try {
-            @SuppressWarnings("unused") final String filesString = Arrays
-                    .toString(Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("Graphite"))
-                            .getDataFolder().listFiles());
-
-        } catch (final Exception e) {
-            e.printStackTrace();
-        }
     }
 }

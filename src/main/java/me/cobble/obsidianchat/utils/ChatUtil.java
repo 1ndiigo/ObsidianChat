@@ -2,14 +2,14 @@ package me.cobble.obsidianchat.utils;
 
 import org.bukkit.ChatColor;
 
-public class Utils { // NO_UCD (unused code)
+public class ChatUtil { // NO_UCD (unused code)
     static public final String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))";
 
     /**
      * @param text The string of text to apply color/effects to
      * @return Returns a string of text with color/effects applied
      */
-    public static String chat(String text) {
+    public static String color(String text) {
 
         String[] texts = text.split(String.format(WITH_DELIMITER, "&"));
 

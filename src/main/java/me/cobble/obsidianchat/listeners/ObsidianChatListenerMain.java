@@ -5,12 +5,11 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
 import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
-import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.ChatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -39,16 +38,16 @@ public class ObsidianChatListenerMain implements Listener {
         if (!Config.get().getBoolean("message-format-in-yml")) {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
                 e.setCancelled(true);
-                p.sendMessage(Utils.chat("&cDo not send placeholders"));
+                p.sendMessage(ChatUtil.color("&cDo not send placeholders"));
             }
 
-            e.setFormat(Utils.chat(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + PlayerChatData.getPCD(p.getUniqueId()).get("nick").getAsString() + " &r&8» ") + c + msg.replace('%', ' ')));
+            e.setFormat(ChatUtil.color(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + PlayerChatData.getPCD(p.getUniqueId()).get("nick").getAsString() + " &r&8» ") + c + msg.replace('%', ' ')));
         } else {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
                 e.setCancelled(true);
-                p.sendMessage(Utils.chat("&cDo not send placeholders"));
+                p.sendMessage(ChatUtil.color("&cDo not send placeholders"));
             }
-            e.setFormat(Utils.chat(PlaceholderAPI.setPlaceholders(p, Config.get().getString("message-format")) + c + msg.replace('%', ' ')));
+            e.setFormat(ChatUtil.color(PlaceholderAPI.setPlaceholders(p, Config.get().getString("message-format")) + c + msg.replace('%', ' ')));
         }
 
         if (Config.get().getBoolean("message-send-sound")) {
@@ -85,8 +84,8 @@ public class ObsidianChatListenerMain implements Listener {
                     footerString.append(str).append("\n");
                 }
 
-                p.setPlayerListHeader(PlaceholderAPI.setPlaceholders(p, Utils.chat(headerString.toString())));
-                p.setPlayerListFooter(PlaceholderAPI.setPlaceholders(p, Utils.chat(footerString.toString())));
+                p.setPlayerListHeader(PlaceholderAPI.setPlaceholders(p, ChatUtil.color(headerString.toString())));
+                p.setPlayerListFooter(PlaceholderAPI.setPlaceholders(p, ChatUtil.color(footerString.toString())));
             }
         }
     }
