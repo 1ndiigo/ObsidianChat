@@ -3,6 +3,7 @@ package me.cobble.obsidianchat.obsidianchat;
 import me.cobble.obsidianchat.cmds.*;
 import me.cobble.obsidianchat.listeners.ObsidianChatListenerMain;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -23,6 +24,13 @@ public final class ObsidianChat extends JavaPlugin {
                 plugin.getLogger().info("Creating player data");
                 //noinspection ResultOfMethodCallIgnored
                 file.createNewFile();
+
+                if(Bukkit.getOnlinePlayers().size() > 0){
+                    for(Player p : Bukkit.getOnlinePlayers()){
+                        PlayerChatData.createPCD(p.getUniqueId());
+                    }
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

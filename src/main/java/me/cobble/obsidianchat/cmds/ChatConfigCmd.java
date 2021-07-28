@@ -44,6 +44,7 @@ public class ChatConfigCmd implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("plugin")) {
                         if (args[1].equalsIgnoreCase("reload")) {
                             Config.reload();
+                            ObsidianChat.initPCD();
                             p.sendMessage(ChatUtil.color("&aPlugin reloaded :D"));
                         }
                     }

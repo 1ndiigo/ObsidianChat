@@ -43,13 +43,16 @@ public class PlayerChatData {
                     if (file.createNewFile()) {
                         plugin.getLogger().info("A file was found missing and has been recovered");
                     }
+                    createPCD(playerUUID);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
             }
 
-            if (jsonObject.get(playerUUID.toString()) == null) {
-                createPCD(playerUUID);
+            if(!jsonObject.isJsonNull()) {
+                if (jsonObject.get(playerUUID.toString()) == null) {
+                    createPCD(playerUUID);
+                }
             }
 
             fr.close();
