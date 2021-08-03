@@ -1,9 +1,9 @@
 package me.cobble.obsidianchat.utils;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,8 +39,7 @@ public class Utils { // NO_UCD (unused code)
         return finalText.toString();
     }
 
-    public static String getValFromJson(JsonArray jsonArray, UUID uuid, JsonConvertTo jsonConvertTo) throws IllegalStateException {
-        Gson gson = new Gson();
+    public static String getValFromJson(JsonArray jsonArray, @NotNull UUID uuid, @NotNull JsonConvertTo jsonConvertTo) throws IllegalStateException {
 
         if (jsonArray == null) {
             ObsidianChat.initPCD();
@@ -56,7 +55,9 @@ public class Utils { // NO_UCD (unused code)
 
         if (jsonConvertTo.equals(JsonConvertTo.INT)) {
             for (int i = 0; i < jsonArray.size(); i++) {
-                if (jsonArray.get(i).toString().contains(uuid.toString())) {
+                Bukkit.broadcastMessage(String.valueOf(jsonArray.get(i).toString().contains(uuid.toString())));
+                if (jsonArray.get(i).isJsonObject() && jsonArray.get(i).toString().contains(uuid.toString())) {
+                    Bukkit.broadcastMessage("YE HAW");
                     return Integer.toString(i);
                 }
             }

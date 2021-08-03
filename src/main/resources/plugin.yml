@@ -23,6 +23,8 @@ commands:
     description: Clears Chat
     aliases:
       - cc
+  genrandomuuid:
+    description: debug cmd
 permissions:
   obsidianchat.clearchat:
     description: Allows you to clear chat

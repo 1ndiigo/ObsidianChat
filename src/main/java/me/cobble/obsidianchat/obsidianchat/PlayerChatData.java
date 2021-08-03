@@ -4,15 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import me.cobble.obsidianchat.utils.JsonConvertTo;
 import me.cobble.obsidianchat.utils.Utils;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 /**
  * Various utilities related to chat
@@ -35,23 +34,20 @@ public class PlayerChatData {
     public static JsonObject getPlayerChatData(@NotNull UUID playerUUID) {
         File file = ObsidianChat.getPCDFile();
         Gson gson = new Gson();
-        JsonReader fr;
         try {
-            fr = new JsonReader(new FileReader(file));
-            fr.setLenient(true);
+            FileReader fr = new FileReader(file);
             JsonArray jsonArray = gson.fromJson(fr, JsonArray.class);
+
+            if (jsonArray == null) {
+                addPlayer(playerUUID);
+            }
+
             JsonObject jsonObject = gson.fromJson(Utils.getValFromJson(jsonArray, playerUUID, JsonConvertTo.JSON_OBJECT), JsonObject.class);
 
             // wtf is going on
             if (jsonObject == null) {
-                try {
-                    if (file.createNewFile()) {
-                        plugin.getLogger().info("A file was found missing and has been recovered");
-                    }
-                    addPlayer(playerUUID);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                ObsidianChat.initPCD();
+                addPlayer(playerUUID);
             }
 
             if (jsonObject.get(playerUUID.toString()) == null) {
@@ -76,12 +72,8 @@ public class PlayerChatData {
     public static JsonArray getAllPlayerChatData() {
         File file = ObsidianChat.getPCDFile();
         Gson gson = new Gson();
-        JsonReader fr;
         try {
-            fr = new JsonReader(new FileReader(file));
-            JsonArray jsonObject = gson.fromJson(fr, JsonArray.class);
-            fr.close();
-            return jsonObject;
+            return gson.fromJson(new FileReader(file), JsonArray.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -96,32 +88,33 @@ public class PlayerChatData {
      * @see org.bukkit.entity.Player
      */
     public static void addPlayer(@NotNull UUID playerUUID) throws IOException {
+        Logger log = plugin.getLogger();
         File file = ObsidianChat.getPCDFile();
-        JsonArray pdc = getAllPlayerChatData();
+        JsonArray playerChatData = getAllPlayerChatData();
+        FileWriter fileWriter = new FileWriter(file);
+        Gson gson = new Gson();
+        JsonWriter jsonWriter = gson.newJsonWriter(new FileWriter(file, true));
 
-        if (pdc != null && pdc.get(Integer.parseInt(Utils.getValFromJson(pdc, playerUUID, JsonConvertTo.INT))).getAsJsonObject().has(playerUUID.toString())) {
+        if (playerChatData == null) {
+
+            jsonWriter.beginArray().beginObject().name(playerUUID.toString());
+            //                                                                                                                                                                  Bukkit.getPlayer(playerUUID).getName()
+            jsonWriter.beginObject().name("cc").value(Config.get().getString("default-chat-color")).name("tagc").value(Config.get().getString("default-tag-color")).name("nick").value("randomNick");
+            jsonWriter.endObject().endObject().endArray().close();
+            fileWriter.close();
             return;
         }
+        String data = playerChatData.toString();
 
-        if (getAllPlayerChatData() == null) {
-            JsonWriter pw = new JsonWriter(new FileWriter(file, true));
-
-            pw.setLenient(true);
-
-            pw.beginArray().beginObject().name(playerUUID.toString()).beginObject().name("cc").value(Config.get().getString("default-chat-color")).name("tagc").value(Config.get().getString("default-tag-color")).name("nick").value(Bukkit.getPlayer(playerUUID).getName()).endObject().endObject().endArray().close();
-        } else {
-            FileWriter fileWriter = new FileWriter(file);
-            Gson gson = new Gson();
-            String data = gson.fromJson(new FileReader(file), String.class);
-            JsonWriter pw = new JsonWriter(new FileWriter(file, true));
-
-            pw.setLenient(true);
-
+        log.info(playerChatData.toString());
+        if (!playerChatData.toString().contains(playerUUID.toString())) {
+            log.info("Data is null?: " + (data == null));
             fileWriter.write(data.replace("]", ","));
-
-            pw.name(playerUUID.toString()).beginObject().name("cc").value(Config.get().getString("default-chat-color")).name("tagc").value(Config.get().getString("default-tag-color")).name("nick").value(Bukkit.getPlayer(playerUUID).getName()).endObject().close();
-
-            fileWriter.append(']');
+            jsonWriter.beginObject().name(playerUUID.toString());
+            //                                                                                                                                                                  Bukkit.getPlayer(playerUUID).getName()
+            jsonWriter.beginObject().name("cc").value(Config.get().getString("default-chat-color")).name("tagc").value(Config.get().getString("default-tag-color")).name("nick").value("notRandomNick");
+            jsonWriter.endObject().endObject().close();
+            fileWriter.write("]");
             fileWriter.close();
         }
     }
@@ -135,9 +128,7 @@ public class PlayerChatData {
      */
     public static void modifyPlayerChatData(@NotNull UUID playerUUID, @NotNull String key, @NotNull String value) {
         File file = ObsidianChat.getPCDFile();
-        GsonBuilder builder = new GsonBuilder();
-        builder.setLenient();
-        Gson gson = builder.create();
+        Gson gson = new GsonBuilder().create();
         JsonObject jsonObject = new JsonObject();
         JsonObject stems = new JsonObject();
         String nickBeforeReset = getPlayerChatData(playerUUID).get("nick").getAsString();
@@ -145,8 +136,6 @@ public class PlayerChatData {
         String chatColorBefore = getPlayerChatData(playerUUID).get("cc").getAsString();
         PrintWriter pw;
         try {
-            ObsidianChat.getPCDFile();
-
             if (value.equalsIgnoreCase("cc")) {
                 jsonObject.addProperty("cc", key);
                 jsonObject.addProperty("tagc", tagColorBefore);
