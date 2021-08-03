@@ -12,15 +12,17 @@ commands:
     description: Configures Player and Plugin settings
     permission: obisidianchat.configure
     aliases:
-      - cc
       - chatconf
       - chatcfg
+      - obsidianchat
   nickname:
     description: Nick yourself!
     aliases:
       - nick
   clearchat:
     description: Clears Chat
+    aliases:
+      - cc
 permissions:
   obsidianchat.clearchat:
     description: Allows you to clear chat

@@ -3,7 +3,7 @@ package me.cobble.obsidianchat.cmds;
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
 import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
-import me.cobble.obsidianchat.utils.ChatUtil;
+import me.cobble.obsidianchat.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,21 +23,22 @@ public class NicknameCmd implements CommandExecutor {
 
             if (p.hasPermission("obsidianchat.nick")) {
                 if (args.length == 0) {
-                    p.sendMessage(ChatUtil.color(Config.get().getString("nickname-no-params-msg")));
+                    p.sendMessage(Utils.color(Config.get().getString("nickname-no-params-msg")));
                 }
 
                 if (args.length == 1) {
-                    PlayerChatData.modifyPCD(p.getUniqueId(), ChatUtil.color(args[0]), "nick");
-                    p.sendMessage(ChatUtil.color("&aSuccessfully set nickname"));
+                    PlayerChatData.modifyPlayerChatData(p.getUniqueId(), Utils.color(args[0]), "nick");
+                    p.setDisplayName(Utils.color(args[0]));
+                    p.sendMessage(Utils.color("&aSuccessfully set nickname"));
                 }
 
                 if (args.length == 2) {
                     Player t = Bukkit.getPlayer(args[0]);
-                    PlayerChatData.modifyPCD(t.getUniqueId(), ChatUtil.color(args[0]), "nick");
-                    p.sendMessage(ChatUtil.color("&aSuccessfully set nickname"));
+                    PlayerChatData.modifyPlayerChatData(t.getUniqueId(), Utils.color(args[0]), "nick");
+                    p.sendMessage(Utils.color("&aSuccessfully set nickname"));
                 }
                 if (args.length > 2) {
-                    p.sendMessage(ChatUtil.color("&cToo many args"));
+                    p.sendMessage(Utils.color("&cToo many args"));
                 }
             }
         }

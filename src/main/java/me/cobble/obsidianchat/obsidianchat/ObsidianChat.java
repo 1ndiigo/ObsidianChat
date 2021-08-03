@@ -1,12 +1,17 @@
 package me.cobble.obsidianchat.obsidianchat;
 
-import me.cobble.obsidianchat.cmds.*;
+import com.google.gson.stream.JsonWriter;
+import me.cobble.obsidianchat.cmds.ChatConfigCmd;
+import me.cobble.obsidianchat.cmds.ChatConfigCompleter;
+import me.cobble.obsidianchat.cmds.ClearChatCmd;
+import me.cobble.obsidianchat.cmds.NicknameCmd;
 import me.cobble.obsidianchat.listeners.ObsidianChatListenerMain;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public final class ObsidianChat extends JavaPlugin {
@@ -25,19 +30,21 @@ public final class ObsidianChat extends JavaPlugin {
                 //noinspection ResultOfMethodCallIgnored
                 file.createNewFile();
 
-                if(Bukkit.getOnlinePlayers().size() > 0){
-                    for(Player p : Bukkit.getOnlinePlayers()){
-                        PlayerChatData.createPCD(p.getUniqueId());
+                if (Bukkit.getOnlinePlayers().size() > 0) {
+                    JsonWriter pw = new JsonWriter(new FileWriter(file));
+
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        pw.beginArray().beginObject().name(p.getUniqueId().toString()).beginObject().name("cc").value(Config.get().getString("default-chat-color")).name("tagc").value(Config.get().getString("default-tag-color")).name("nick").value(Bukkit.getPlayer(p.getUniqueId()).getName()).endObject().endObject().endArray().close();
                     }
                 }
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ignored) {
+                // help
             }
         }
     }
 
-    private void register(ObsidianChat plugin) {
+    private static void register(ObsidianChat plugin) {
 
         // listeners
         new ObsidianChatListenerMain(plugin);
@@ -59,14 +66,9 @@ public final class ObsidianChat extends JavaPlugin {
 
         this.loadConfig();
         getLogger().info("Loaded Config");
-        this.register(plugin);
+        ObsidianChat.register(plugin);
         new PlayerListRefresh(plugin).run();
         getLogger().info("Registered Components");
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
     }
 
     // loads config.yml
@@ -74,12 +76,12 @@ public final class ObsidianChat extends JavaPlugin {
         this.saveDefaultConfig();
         Config.setup();
         Config.get().options().copyDefaults(true);
-        Config.get().options().header("Chat Event Prize - This only works if your server has an economy plugin and vault installed (for money prizes, this must end in a $)\nPlayer list Nicknames - Shows your nickname and rank in the player list");
+        Config.get().options().header("Player list Nicknames - Shows your nickname and rank in the player list");
         Config.save();
         initPCD();
     }
 
-    public static File getPCDFile(){
+    public static File getPCDFile() {
         return file;
     }
 }

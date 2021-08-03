@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -16,8 +15,8 @@ public class Config {
     private static YamlConfiguration config;
 
     /**
-    * Creates config file
-    * Note: You should not use the config class before this is ran
+     * Creates config file
+     * Note: You should not use the config class before this is run
      */
     public static void setup() { // NO_UCD (use default)
         file = new File(
@@ -46,13 +45,13 @@ public class Config {
 
     /**
      * Saves config
-     * Note: This should be ran after editing the config
+     * Note: This should be run after editing the config
      */
     public static void save() { // NO_UCD (use default)
         try {
             config.save(file);
         } catch (final IOException e) {
-            System.err.println("Couldn't save file");
+            log.severe("Couldn't save file");
         }
     }
 

@@ -2,7 +2,7 @@ package me.cobble.obsidianchat.cmds;
 
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
-import me.cobble.obsidianchat.utils.ChatUtil;
+import me.cobble.obsidianchat.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,13 +24,13 @@ public class ClearChatCmd implements CommandExecutor {
                 Bukkit.broadcastMessage(" ");
             }
 
-            sender.sendMessage(ChatUtil.color("&aChat Cleared!"));
+            sender.sendMessage(Utils.color("&aChat Cleared!"));
             if (Config.get().getBoolean("broadcast-who-cleared-chat")) {
                 if (sender instanceof ConsoleCommandSender) {
-                    Bukkit.broadcastMessage(ChatUtil.color("&aChat Cleared by Console"));
+                    Bukkit.broadcastMessage(Utils.color("&aChat Cleared by Console"));
                 }
                 if (sender instanceof Player) {
-                    Bukkit.broadcastMessage(ChatUtil.color("&aChat Cleared by " + sender.getName()));
+                    Bukkit.broadcastMessage(Utils.color("&aChat Cleared by " + sender.getName()));
                 }
             }
         }
