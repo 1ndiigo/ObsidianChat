@@ -3,16 +3,14 @@ package me.cobble.obsidianchat.listeners;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
-import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
 import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import java.io.IOException;
 
 public class JoinLeaveListeners implements Listener {
     public JoinLeaveListeners(ObsidianChat plugin) {
@@ -23,12 +21,8 @@ public class JoinLeaveListeners implements Listener {
     public static void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
 
-        if (!p.hasPlayedBefore() || PlayerChatData.getAllPlayerChatData() == null || PlayerChatData.getPlayerChatData(p.getUniqueId()) == null) {
-            try {
-                PlayerChatData.addPlayer(p.getUniqueId());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        if (!p.hasPlayedBefore() || ChatDataUtility.getPlayerChatData(p.getUniqueId()) == null) {
+            ChatDataUtility.createPlayerChatData(p.getUniqueId(), p.getDisplayName(), "&7");
         }
 
         if (Config.get().getBoolean("playerlist-modification")) {

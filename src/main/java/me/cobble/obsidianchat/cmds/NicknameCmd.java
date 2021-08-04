@@ -2,8 +2,9 @@ package me.cobble.obsidianchat.cmds;
 
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
-import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
 import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.chatdata.ChatData;
+import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,14 +28,17 @@ public class NicknameCmd implements CommandExecutor {
                 }
 
                 if (args.length == 1) {
-                    PlayerChatData.modifyPlayerChatData(p.getUniqueId(), Utils.color(args[0]), "nick");
-                    p.setDisplayName(Utils.color(args[0]));
+                    ChatData chatData = new ChatData(p.getUniqueId());
+                    chatData.setNick(args[0]);
+                    ChatDataUtility.updateChatData(p.getUniqueId(), chatData);
                     p.sendMessage(Utils.color("&aSuccessfully set nickname"));
                 }
 
                 if (args.length == 2) {
                     Player t = Bukkit.getPlayer(args[0]);
-                    PlayerChatData.modifyPlayerChatData(t.getUniqueId(), Utils.color(args[0]), "nick");
+                    ChatData chatData = ChatDataUtility.getPlayerChatData(t.getUniqueId());
+                    chatData.setNick(args[0]);
+                    ChatDataUtility.updateChatData(t.getUniqueId(), chatData);
                     p.sendMessage(Utils.color("&aSuccessfully set nickname"));
                 }
                 if (args.length > 2) {

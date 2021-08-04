@@ -4,6 +4,7 @@ import com.google.gson.stream.JsonWriter;
 import me.cobble.obsidianchat.cmds.*;
 import me.cobble.obsidianchat.listeners.JoinLeaveListeners;
 import me.cobble.obsidianchat.listeners.ObsidianChatListenerMain;
+import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public final class ObsidianChat extends JavaPlugin {
+public class ObsidianChat extends JavaPlugin {
 
 
     private static ObsidianChat plugin;
@@ -65,13 +66,30 @@ public final class ObsidianChat extends JavaPlugin {
 
         file = new File(Bukkit.getPluginManager().getPlugin(plugin.getName()).getDataFolder(), "player-chat-data.json");
 
-        new PlayerChatData(plugin);
+        getLogger().info("Initiating Chat Data");
+        new ChatDataUtility(plugin);
 
+        getLogger().info("Loading Config");
         this.loadConfig();
         getLogger().info("Loaded Config");
+        getLogger().info("Registering Components");
         ObsidianChat.register(plugin);
-        new PlayerListRefresh(plugin).run();
         getLogger().info("Registered Components");
+        getLogger().info("Starting Tasks");
+        new PlayerListRefresh(plugin).run();
+        getLogger().info("Tasks Started");
+    }
+
+    @Override
+    public void onDisable() {
+        getLogger().info("Saving chat data");
+        try {
+            ChatDataUtility.saveChatData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            getLogger().warning("Unable to save chat data, some data may be lost");
+        }
+        getLogger().info("Goodbye!");
     }
 
     // loads config.yml

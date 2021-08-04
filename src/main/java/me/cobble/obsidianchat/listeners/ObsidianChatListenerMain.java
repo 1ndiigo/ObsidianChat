@@ -1,19 +1,17 @@
 package me.cobble.obsidianchat.listeners;
 
-import com.google.gson.JsonObject;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
-import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
 import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.chatdata.ChatData;
+import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import java.io.IOException;
 
 public class ObsidianChatListenerMain implements Listener {
     public ObsidianChatListenerMain(ObsidianChat plugin) {
@@ -24,21 +22,17 @@ public class ObsidianChatListenerMain implements Listener {
     public static void onChat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         String msg = e.getMessage();
-        JsonObject pcd = PlayerChatData.getPlayerChatData(p.getUniqueId());
+        ChatData pcd = ChatDataUtility.getPlayerChatData(p.getUniqueId());
 
         if (pcd == null) {
             if (ObsidianChat.getPCDFile().exists()) {
-                try {
-                    PlayerChatData.addPlayer(p.getUniqueId());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                ChatDataUtility.createPlayerChatData(p.getUniqueId(), p.getDisplayName(), "&7");
             } else {
                 ObsidianChat.initPCD();
             }
         }
 
-        String c = pcd.get("cc").getAsString();
+        String c = pcd.getChatColor();
 
         if (!Config.get().getBoolean("message-format-in-yml")) {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
@@ -46,7 +40,7 @@ public class ObsidianChatListenerMain implements Listener {
                 p.sendMessage(Utils.color("&cDo not send placeholders"));
             }
 
-            e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + PlayerChatData.getPlayerChatData(p.getUniqueId()).get("nick").getAsString() + " &r&8» ") + c + msg.replace('%', ' ')));
+            e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + ChatDataUtility.getPlayerChatData(p.getUniqueId()).getNick() + " &r&8» ") + c + msg.replace('%', ' ')));
         } else {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
                 e.setCancelled(true);

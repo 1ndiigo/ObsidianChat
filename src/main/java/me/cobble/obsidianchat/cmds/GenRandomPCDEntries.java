@@ -1,13 +1,12 @@
 package me.cobble.obsidianchat.cmds;
 
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
-import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
+import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public class GenRandomPCDEntries implements CommandExecutor {
@@ -17,12 +16,9 @@ public class GenRandomPCDEntries implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        for (int i = 0; i < 6; i++) {
-            try {
-                PlayerChatData.addPlayer(UUID.randomUUID());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        int num = args.length == 1 ? Integer.parseInt(args[0]) : 6;
+        for (int i = 0; i < num; i++) {
+            ChatDataUtility.createPlayerChatData(UUID.randomUUID(), "randomNick", "&7");
         }
         return false;
     }

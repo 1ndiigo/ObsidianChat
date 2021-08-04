@@ -2,8 +2,9 @@ package me.cobble.obsidianchat.cmds;
 
 import me.cobble.obsidianchat.obsidianchat.Config;
 import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
-import me.cobble.obsidianchat.obsidianchat.PlayerChatData;
 import me.cobble.obsidianchat.utils.Utils;
+import me.cobble.obsidianchat.utils.chatdata.ChatData;
+import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -60,24 +61,20 @@ public class ChatConfigCmd implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("player")) {
                         if (args[2].equalsIgnoreCase("chat-color")) {
                             p.sendMessage(Utils.color("&cPlease specify what color you want."));
-                            break;
                         } else {
                             p.sendMessage(Utils.color("&cInvalid Setting."));
-                            break;
                         }
+                        break;
                     }
                     break;
                 case 4:
                     if (args[0].equalsIgnoreCase("player")) {
                         if (args[2].equalsIgnoreCase("chat-color")) {
                             Player target = Bukkit.getPlayer(args[1]);
-                            PlayerChatData.modifyPlayerChatData(target.getUniqueId(), args[3], "cc");
+                            ChatData chatData = ChatDataUtility.getPlayerChatData(target.getUniqueId());
+                            chatData.setNick(args[3]);
+                            ChatDataUtility.updateChatData(target.getUniqueId(), chatData);
                             p.sendMessage(Utils.color("&aSuccessfully set chat color to " + args[3] + "this"));
-                            break;
-                        } else if (args[2].equalsIgnoreCase("tag-color")) {
-                            Player target = Bukkit.getPlayer(args[1]);
-                            PlayerChatData.modifyPlayerChatData(target.getUniqueId(), args[3], "tagc");
-                            p.sendMessage(Utils.color("&aSuccessfully set tag color to " + args[3] + "this"));
                             break;
                         }
                     }

@@ -13,6 +13,6 @@ player-list-footer:
 message-format-in-yml: false
 message-send-sound: false
 message-format: "&7%luckperms_prefix% &8| "
-
 nickname-no-params-msg: "&cUsage: /nickname <nickname>"
 broadcast-who-cleared-chat: false
+chat-data-save-interval: 10
