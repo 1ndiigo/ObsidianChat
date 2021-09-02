@@ -1,5 +1,4 @@
 default-chat-color: "&7"
-default-tag-color: "&7"
 playerlist-names: true
 playerlist-modification: true
 player-list-header:
@@ -16,3 +15,4 @@ message-format: "&7%luckperms_prefix% &8| "
 nickname-no-params-msg: "&cUsage: /nickname <nickname>"
 broadcast-who-cleared-chat: false
 chat-data-save-interval: 10
+debug-mode: false

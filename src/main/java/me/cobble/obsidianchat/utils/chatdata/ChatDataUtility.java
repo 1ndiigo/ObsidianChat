@@ -1,15 +1,13 @@
 package me.cobble.obsidianchat.utils.chatdata;
 
 import com.google.gson.Gson;
-import me.cobble.obsidianchat.obsidianchat.ObsidianChat;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import me.cobble.obsidianchat.utils.Utils;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 /**
  * Various utilities related to chat
@@ -17,14 +15,17 @@ import java.util.logging.Logger;
 public class ChatDataUtility {
 
     private static final ArrayList<ChatData> allChatData = new ArrayList<>();
-    private static ObsidianChat plugin;
 
-    public ChatDataUtility(ObsidianChat plugin) {
-        ChatDataUtility.plugin = plugin;
-    }
+    /**
+     * Retrieves a player's chat data
+     *
+     * @param uuid - UUID of player to be retrieved
+     * @return The player's ChatData object
+     * @see ChatData
+     */
+    public static ChatData get(UUID uuid) {
 
-    public static ChatData getPlayerChatData(UUID uuid) {
-        for (ChatData allChatDatum : ChatDataUtility.allChatData) {
+        for (ChatData allChatDatum : allChatData) {
             if (allChatDatum.getUUID().equalsIgnoreCase(uuid.toString())) {
                 return allChatDatum;
             }
@@ -32,24 +33,34 @@ public class ChatDataUtility {
         return null;
     }
 
-    public static void createPlayerChatData(UUID uuid, String nick, String chatColor) {
-        ChatData chatData = new ChatData(uuid);
-        chatData.setChatColor(chatColor);
-        chatData.setNick(nick);
+    /**
+     * Creates entry into ChatData
+     *
+     * @param uuid      - UUID of player to be created
+     * @param nick      - Player's default nick
+     * @param chatColor - Default color of chat messages
+     */
+    public static void create(UUID uuid, String chatColor, String nick) {
+        ChatData chatData = new ChatData(uuid, chatColor, nick);
         allChatData.add(chatData);
         try {
-            saveChatData();
+            save();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void removeChatData(UUID uuid) {
+    /**
+     * Removes player from ChatData
+     *
+     * @param uuid - UUID of player to remove
+     */
+    public static void remove(UUID uuid) {
         for (ChatData chatData : allChatData) {
             if (chatData.getUUID().equalsIgnoreCase(uuid.toString())) {
                 allChatData.remove(chatData);
                 try {
-                    saveChatData();
+                    save();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -58,37 +69,59 @@ public class ChatDataUtility {
         }
     }
 
-    public static void saveChatData() throws IOException {
+    /**
+     * Saves ChatData changes to file
+     *
+     * @throws IOException - When the data can not be saved
+     */
+    public static void save() throws IOException {
+        File file = Utils.getPCDFile();
         Gson gson = new Gson();
-        File file = ObsidianChat.getPCDFile();
-        Logger log = plugin.getLogger();
+        Writer writer = new FileWriter(file);
 
         file.createNewFile();
-        Writer writer = new FileWriter(file, false);
+
         gson.toJson(allChatData, writer);
+
         writer.flush();
         writer.close();
-        log.info("Chat related data successfully saved!");
     }
 
-    public static ChatData updateChatData(UUID uuid, ChatData newData) {
+    /**
+     * Changes ChatData of player
+     *
+     * @param uuid    - UUID of player
+     * @param newData - Data to change existing ChatData to
+     */
+    public static void update(UUID uuid, ChatData newData) {
         for (ChatData allChatDatum : allChatData) {
             if (allChatDatum.getUUID().equalsIgnoreCase(uuid.toString())) {
-                allChatDatum.setNick(newData.getNick());
                 allChatDatum.setChatColor(newData.getChatColor());
+                allChatDatum.setNick(newData.getNick());
                 try {
-                    saveChatData();
+                    save();
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return allChatDatum;
+                return;
             }
         }
-        return null;
     }
 
-    public static void loadChatData() {
+    public static void load() throws IOException {
+        if (allChatData.isEmpty()) {
+            Gson gson = new Gson();
+            Reader reader = new FileReader(Utils.getPCDFile());
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
+            for (JsonElement element : jsonArray) {
+                UUID uuid = UUID.fromString(element.getAsJsonObject().get("uuid").getAsString());
+                String cc = element.getAsJsonObject().get("chatColor").getAsString();
+                String nick = element.getAsJsonObject().get("nick").getAsString();
+
+                create(uuid, cc, nick);
+            }
+        }
     }
 }

@@ -21,8 +21,8 @@ public class JoinLeaveListeners implements Listener {
     public static void onJoin(PlayerJoinEvent e) {
         Player p = e.getPlayer();
 
-        if (!p.hasPlayedBefore() || ChatDataUtility.getPlayerChatData(p.getUniqueId()) == null) {
-            ChatDataUtility.createPlayerChatData(p.getUniqueId(), p.getDisplayName(), "&7");
+        if (!p.hasPlayedBefore() || ChatDataUtility.get(p.getUniqueId()) == null) {
+            ChatDataUtility.create(p.getUniqueId(), Config.get().getString("default-chat-color"), p.getName());
         }
 
         if (Config.get().getBoolean("playerlist-modification")) {

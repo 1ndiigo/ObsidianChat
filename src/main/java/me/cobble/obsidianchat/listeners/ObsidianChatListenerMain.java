@@ -22,31 +22,34 @@ public class ObsidianChatListenerMain implements Listener {
     public static void onChat(AsyncPlayerChatEvent e) {
         Player p = e.getPlayer();
         String msg = e.getMessage();
-        ChatData pcd = ChatDataUtility.getPlayerChatData(p.getUniqueId());
+        ChatData pcd = ChatDataUtility.get(p.getUniqueId());
 
         if (pcd == null) {
-            if (ObsidianChat.getPCDFile().exists()) {
-                ChatDataUtility.createPlayerChatData(p.getUniqueId(), p.getDisplayName(), "&7");
-            } else {
-                ObsidianChat.initPCD();
-            }
+            ChatDataUtility.create(p.getUniqueId(), Config.get().getString("default-chat-color"), pcd.getNick());
         }
 
-        String c = pcd.getChatColor();
+        String c = pcd == null ? Config.get().getString("default-chat-color") : pcd.getChatColor();
 
         if (!Config.get().getBoolean("message-format-in-yml")) {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
                 e.setCancelled(true);
                 p.sendMessage(Utils.color("&cDo not send placeholders"));
             }
-
-            e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + ChatDataUtility.getPlayerChatData(p.getUniqueId()).getNick() + " &r&8» ") + c + msg.replace('%', ' ')));
+            if (p.hasPermission("obisidianchat.chat.color")) {
+                e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + pcd.getNick() + " &r&8» ") + c + msg.replace('%', ' ')));
+            } else {
+                e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, "%luckperms_prefix%" + " &r&8| &r&7" + pcd.getNick() + " &r&8» ") + c) + msg.replace('%', ' '));
+            }
         } else {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
                 e.setCancelled(true);
                 p.sendMessage(Utils.color("&cDo not send placeholders"));
             }
-            e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, Config.get().getString("message-format")) + c + msg.replace('%', ' ')));
+            if (p.hasPermission("obisidianchat.chat.color")) {
+                e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, Config.get().getString("message-format")) + c + msg.replace('%', ' ')));
+            } else {
+                e.setFormat(Utils.color(PlaceholderAPI.setPlaceholders(p, Config.get().getString("message-format")) + c) + msg.replace('%', ' '));
+            }
         }
 
         if (Config.get().getBoolean("message-send-sound")) {

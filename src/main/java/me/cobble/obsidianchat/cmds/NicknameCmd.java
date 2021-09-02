@@ -28,18 +28,42 @@ public class NicknameCmd implements CommandExecutor {
                 }
 
                 if (args.length == 1) {
-                    ChatData chatData = new ChatData(p.getUniqueId());
+                    ChatData chatData = ChatDataUtility.get(p.getUniqueId());
+
+                    if (chatData == null) {
+                        ChatDataUtility.create(p.getUniqueId(), Config.get().getString("default-chat-color"), args[0]);
+                        return false;
+                    }
+
+                    chatData.setChatColor(chatData.getChatColor());
                     chatData.setNick(args[0]);
-                    ChatDataUtility.updateChatData(p.getUniqueId(), chatData);
+                    ChatDataUtility.update(p.getUniqueId(), chatData);
                     p.sendMessage(Utils.color("&aSuccessfully set nickname"));
                 }
 
                 if (args.length == 2) {
-                    Player t = Bukkit.getPlayer(args[0]);
-                    ChatData chatData = ChatDataUtility.getPlayerChatData(t.getUniqueId());
-                    chatData.setNick(args[0]);
-                    ChatDataUtility.updateChatData(t.getUniqueId(), chatData);
-                    p.sendMessage(Utils.color("&aSuccessfully set nickname"));
+                    if (p.hasPermission("obisidianchat.nick.others")) {
+                        Player t = Bukkit.getPlayer(args[1]);
+
+                        if (t == null) {
+                            p.sendMessage(Utils.color("&cThat player is not online or does not exist"));
+                            return false;
+                        }
+
+                        ChatData chatData = ChatDataUtility.get(t.getUniqueId());
+
+                        if (chatData == null) {
+                            ChatDataUtility.create(t.getUniqueId(), Config.get().getString("default-chat-color"), args[1]);
+                            return false;
+                        }
+
+                        chatData.setChatColor(chatData.getChatColor());
+                        chatData.setNick(args[0]);
+                        ChatDataUtility.update(t.getUniqueId(), chatData);
+                        p.sendMessage(Utils.color("&aSuccessfully set nickname"));
+                    } else {
+                        p.sendMessage(Utils.color("&aYou do not have permission to change other's nicknames"));
+                    }
                 }
                 if (args.length > 2) {
                     p.sendMessage(Utils.color("&cToo many args"));

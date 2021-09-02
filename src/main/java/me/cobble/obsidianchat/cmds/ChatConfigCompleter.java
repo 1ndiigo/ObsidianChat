@@ -38,7 +38,6 @@ public class ChatConfigCompleter implements TabCompleter {
             if (args.length == 3) {
                 ArrayList<String> options = new ArrayList<>();
                 options.add("chat-color");
-                options.add("tag-color");
 
                 return options;
             }
@@ -56,7 +55,6 @@ public class ChatConfigCompleter implements TabCompleter {
         if (args[0].equalsIgnoreCase("plugin")) {
             ArrayList<String> plOptions = new ArrayList<>();
             plOptions.add("default-chat-color");
-            plOptions.add("default-tag-color");
             plOptions.add("reload");
 
             return plOptions;

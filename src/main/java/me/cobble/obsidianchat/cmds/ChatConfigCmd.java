@@ -39,7 +39,7 @@ public class ChatConfigCmd implements CommandExecutor {
                     }
 
                     if (args[0].equalsIgnoreCase("plugin")) {
-                        p.sendMessage(Utils.color("&aHI"));
+                        p.sendMessage(Utils.color("&cPlease enter an argument"));
                         break;
                     }
                     break;
@@ -51,7 +51,6 @@ public class ChatConfigCmd implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("plugin")) {
                         if (args[1].equalsIgnoreCase("reload")) {
                             Config.reload();
-                            ObsidianChat.initPCD();
                             p.sendMessage(Utils.color("&aPlugin reloaded :D"));
                             break;
                         }
@@ -71,9 +70,9 @@ public class ChatConfigCmd implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("player")) {
                         if (args[2].equalsIgnoreCase("chat-color")) {
                             Player target = Bukkit.getPlayer(args[1]);
-                            ChatData chatData = ChatDataUtility.getPlayerChatData(target.getUniqueId());
-                            chatData.setNick(args[3]);
-                            ChatDataUtility.updateChatData(target.getUniqueId(), chatData);
+                            ChatData chatData = ChatDataUtility.get(target.getUniqueId());
+                            chatData.setChatColor(args[3]);
+                            ChatDataUtility.update(target.getUniqueId(), chatData);
                             p.sendMessage(Utils.color("&aSuccessfully set chat color to " + args[3] + "this"));
                             break;
                         }

@@ -23,8 +23,6 @@ commands:
     description: Clears Chat
     aliases:
       - cc
-  genrandomuuid:
-    description: debug cmd
 permissions:
   obsidianchat.clearchat:
     description: Allows you to clear chat
@@ -32,6 +30,11 @@ permissions:
   obsidianchat.nick:
     description: Allows you to nick yourself
     default: op
+  obsidianchat.nick.others:
+    description: Allows you to nick others
+    default: op
+    children:
+      - obsidianchat.nick
   obsidianchat.configure:
     default: op
     children:
@@ -49,3 +52,5 @@ permissions:
   obsidianchat.configure.plugin:
     description: Allows you to modify plugin settings
     default: op
+  obsidianchat.chat.color:
+    description: Needed to send color in chat
