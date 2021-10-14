@@ -25,9 +25,9 @@ public class ChatDataUtility {
      */
     public static ChatData get(UUID uuid) {
 
-        for (ChatData allChatDatum : allChatData) {
-            if (allChatDatum.getUUID().equalsIgnoreCase(uuid.toString())) {
-                return allChatDatum;
+        for (ChatData chatDatum : allChatData) {
+            if (chatDatum.getUUID().equalsIgnoreCase(uuid.toString())) {
+                return chatDatum;
             }
         }
         return null;
@@ -79,6 +79,7 @@ public class ChatDataUtility {
         Gson gson = new Gson();
         Writer writer = new FileWriter(file);
 
+        //noinspection ResultOfMethodCallIgnored
         file.createNewFile();
 
         gson.toJson(allChatData, writer);
@@ -94,17 +95,14 @@ public class ChatDataUtility {
      * @param newData - Data to change existing ChatData to
      */
     public static void update(UUID uuid, ChatData newData) {
-        for (ChatData allChatDatum : allChatData) {
-            if (allChatDatum.getUUID().equalsIgnoreCase(uuid.toString())) {
-                allChatDatum.setChatColor(newData.getChatColor());
-                allChatDatum.setNick(newData.getNick());
-                try {
-                    save();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return;
+        ChatData chatData = get(uuid);
+        if (chatData != null) {
+            chatData.setNick(newData.getNick());
+            chatData.setChatColor(newData.getChatColor());
+            try {
+                save();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

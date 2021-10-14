@@ -53,7 +53,7 @@ public class NicknameCmd implements CommandExecutor {
                         ChatData chatData = ChatDataUtility.get(t.getUniqueId());
 
                         if (chatData == null) {
-                            ChatDataUtility.create(t.getUniqueId(), Config.get().getString("default-chat-color"), args[1]);
+                            ChatDataUtility.create(t.getUniqueId(), Config.get().getString("default-chat-color"), args[0]);
                             return false;
                         }
 

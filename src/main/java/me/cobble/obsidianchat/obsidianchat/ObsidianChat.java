@@ -1,10 +1,8 @@
 package me.cobble.obsidianchat.obsidianchat;
 
-import me.cobble.obsidianchat.cmds.ChatConfigCmd;
-import me.cobble.obsidianchat.cmds.ChatConfigCompleter;
-import me.cobble.obsidianchat.cmds.ClearChatCmd;
-import me.cobble.obsidianchat.cmds.NicknameCmd;
+import me.cobble.obsidianchat.cmds.*;
 import me.cobble.obsidianchat.listeners.JoinLeaveListeners;
+import me.cobble.obsidianchat.listeners.MsgListener;
 import me.cobble.obsidianchat.listeners.ObsidianChatListenerMain;
 import me.cobble.obsidianchat.utils.Utils;
 import me.cobble.obsidianchat.utils.chatdata.ChatDataUtility;
@@ -28,12 +26,16 @@ public class ObsidianChat extends JavaPlugin {
         // listeners
         new ObsidianChatListenerMain(plugin);
         new JoinLeaveListeners(plugin);
+        new MsgListener(plugin);
+        // not actually a command, how sneaky
+        new MsgCommand(plugin);
 
         // commands
         new ChatConfigCmd(plugin);
         new ChatConfigCompleter(plugin);
         new NicknameCmd(plugin);
         new ClearChatCmd(plugin);
+        new SocialSpy(plugin);
     }
 
     @Override

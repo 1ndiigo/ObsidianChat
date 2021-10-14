@@ -23,7 +23,18 @@ commands:
     description: Clears Chat
     aliases:
       - cc
+  socialspy:
+    description: Spy on msgs
+
 permissions:
+  obsidianchat.admin:
+    description: Admin permission, every permission
+    children:
+      - obsidianchat.configure
+      - obsidianchat.nick
+      - obsidianchat.clearchat
+      - obsidianchat.chat.color
+      - obsidianchat.socialspy
   obsidianchat.clearchat:
     description: Allows you to clear chat
     default: op
@@ -54,3 +65,5 @@ permissions:
     default: op
   obsidianchat.chat.color:
     description: Needed to send color in chat
+  obsidianchat.socialspy:
+    description: Permission for spying on msgs

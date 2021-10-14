@@ -20,15 +20,16 @@ public class ObsidianChatListenerMain implements Listener {
 
     @EventHandler
     public static void onChat(AsyncPlayerChatEvent e) {
+
         Player p = e.getPlayer();
         String msg = e.getMessage();
         ChatData pcd = ChatDataUtility.get(p.getUniqueId());
 
         if (pcd == null) {
-            ChatDataUtility.create(p.getUniqueId(), Config.get().getString("default-chat-color"), pcd.getNick());
+            ChatDataUtility.create(p.getUniqueId(), Config.get().getString("default-chat-color"), p.getName());
         }
 
-        String c = pcd == null ? Config.get().getString("default-chat-color") : pcd.getChatColor();
+        String c = pcd.getChatColor();
 
         if (!Config.get().getBoolean("message-format-in-yml")) {
             if (PlaceholderAPI.containsPlaceholders(msg)) {
