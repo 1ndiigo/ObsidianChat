@@ -1,6 +1,5 @@
 package me.cobble.obsidianchat.utils;
-
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -10,6 +9,8 @@ public class Utils { // NO_UCD (unused code)
     private static File file;
 
     /**
+     * Applies color codes to imported test, including RGB
+     *
      * @param text The string of text to apply color/effects to
      * @return Returns a string of text with color/effects applied
      */
@@ -24,7 +25,7 @@ public class Utils { // NO_UCD (unused code)
                 //get the next string
                 i++;
                 if (texts[i].charAt(0) == '#') {
-                    finalText.append(net.md_5.bungee.api.ChatColor.of(texts[i].substring(0, 7))).append(texts[i].substring(7));
+                    finalText.append(ChatColor.of(texts[i].substring(0, 7))).append(texts[i].substring(7));
                 } else {
                     finalText.append(ChatColor.translateAlternateColorCodes('&', "&" + texts[i]));
                 }

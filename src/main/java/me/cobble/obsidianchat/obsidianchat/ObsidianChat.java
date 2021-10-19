@@ -55,6 +55,7 @@ public class ObsidianChat extends JavaPlugin {
         getLogger().info("Starting Tasks");
         new PlayerListRefresh(plugin).run();
         getLogger().info("Tasks Started");
+        getLogger().info("Startup Complete");
     }
 
     @Override

@@ -107,6 +107,10 @@ public class ChatDataUtility {
         }
     }
 
+    /**
+     * Loads ChatData
+     * @throws IOException - when cant be loaded
+     */
     public static void load() throws IOException {
         if (allChatData.isEmpty()) {
             Gson gson = new Gson();

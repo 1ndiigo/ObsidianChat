@@ -22,8 +22,7 @@ public class ChatConfigCmd implements CommandExecutor {
         if (sender instanceof Player) {
             Player p = (Player) sender;
 
-            // Argument Solving
-            // Do not question the lack of DRY of this code
+            // Argument Solving takes a long time
             switch (args.length) {
                 default:
                     p.sendMessage(Utils.color("&CToo many arguments"));
